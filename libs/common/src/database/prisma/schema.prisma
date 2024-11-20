@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/////////////////////////////////////// JOBS SERVICE ///////////////////////////////////////
+
+// Enums
+enum JobStatus {
+  ACTIVE
+  CLOSED
+  COMPLETED
+}
+
+enum ApplicationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model Job {
+  id            String      @id @unique @default(uuid())
+  title         String
+  description   String
+  companyName   String
+  location      String?
+  salaryRange   String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime?   @updatedAt
+  maxCvs        Int
+  deadline      DateTime
+  status        JobStatus   @default(ACTIVE)
+  candidates    Candidate[]
+  disclosureFee Decimal
+  userId        String?
+}
+
+model Recruiter {
+  id                    String                 @id @default(uuid())
+  email                 String                 @unique
+  password              String
+  recruiterApplications RecruiterApplication[]
+  hiredRecruiters       HiredRecruiter[]
+  candidates            Candidate[]
+}
+
+model RecruiterApplication {
+  id          String            @id @default(uuid())
+  jobId       String
+  // job         Job               @relation(fields: [jobId], references: [id])
+  recruiterId String
+  recruiter   Recruiter         @relation(fields: [recruiterId], references: [id])
+  status      ApplicationStatus @default(PENDING)
+  appliedAt   DateTime          @default(now())
+}
+
+model HiredRecruiter {
+  id          String    @id @default(uuid())
+  jobId       String
+  // job         Job       @relation(fields: [jobId], references: [id])
+  recruiterId String
+  recruiter   Recruiter @relation(fields: [recruiterId], references: [id])
+  hiredAt     DateTime  @default(now())
+}
+
+model Candidate {
+  id          String    @id @default(uuid())
+  jobId       String
+  job         Job       @relation(fields: [jobId], references: [id])
+  addedById   String
+  addedBy     Recruiter @relation(fields: [addedById], references: [id])
+  details     Json
+  isDisclosed Boolean   @default(false)
+  disclosedAt DateTime?
+}
+
+/////////////////////////////////////// END OF JOBS SERVICE ///////////////////////////////////////
+
+
+/////////////////////////////////////// AUTH SERVICE ///////////////////////////////////////
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
