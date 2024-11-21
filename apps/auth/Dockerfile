@@ -19,7 +19,8 @@ RUN npm config set registry https://registry.yarnpkg.com/ && \
     npm install
 
 # Set environment variable
-ENV DATABASE_URL=postgres://sleepr:testingpassword@database:5434/sleepr
+ENV DATABASE_URL=${DATABASE_URL}
+
 
 # Copy the rest of the application code
 # The first argument is the path to the file or directory on the host machine,
@@ -45,6 +46,9 @@ ARG NODE_ENV=production
 # Set the NODE_ENV environment variable to production (used during runtime)
 ENV NODE_ENV=${NODE_ENV}
 
+# Set the DATABASE_URL environment variable to be used during runtime
+ENV DATABASE_URL=${DATABASE_URL}
+
 # Set the working directory
 WORKDIR /usr/src/app
 
@@ -61,5 +65,3 @@ COPY --from=development /usr/src/app/dist ./dist
 
 # The CMD instruction specifies the command that should be executed when the Docker container starts up.
 CMD ["node", "dist/apps/auth/main.js"]
-
-

@@ -2,12 +2,15 @@ import { NestFactory } from '@nestjs/core';
 import { JobsModule } from './jobs.module';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   console.log('testing')
   const app = await NestFactory.create(JobsModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useLogger(app.get(Logger));
-  await app.listen(process.env.port ?? 3000);
+  const configService = app.get(ConfigService);
+  await app.listen(configService.get('JOBS_PORT'));  
+  
 }
 bootstrap();

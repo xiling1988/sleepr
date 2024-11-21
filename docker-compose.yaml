@@ -6,6 +6,8 @@ services:
       dockerfile: ./apps/jobs/Dockerfile
       target: development
     command: npm run start:dev jobs # Run the jobs service in development mode
+    env_file:
+      - ./apps/jobs/.env
     ports:
       - '3000:3000'
       - '5555:5555' # Map port 3000 on the host to port 3000 in the container
@@ -18,12 +20,31 @@ services:
     depends_on:
       - database # Ensure the database service is started before the jobs service
 
+  auth:
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+      target: development
+    command: npm run start:dev auth
+    env_file:
+      - ./apps/auth/.env
+    ports:
+      - '3001:3001'
+    volumes:
+      - .:/usr/src/app
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    networks:
+      - sleepr_network
+    depends_on:
+      - database
   # Service for the PostgreSQL database
   database:
     image: postgres:17
-    
+    env_file:
+      - ./libs/common/src/database/.env
     ports:
-      - '5432:5432'
+      - "5432:5432" # Map the host port to the container port
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
