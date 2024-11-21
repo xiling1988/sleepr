@@ -6,6 +6,7 @@ import { LoggerModule, PrismaModule } from '@app/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
+import { UsersService } from './users/users.service';
 
 @Module({
   imports: [PrismaModule ,UsersModule, LoggerModule, ConfigModule.forRoot({

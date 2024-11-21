@@ -19,7 +19,6 @@ services:
       - sleepr_network
     depends_on:
       - database # Ensure the database service is started before the jobs service
-
   auth:
     build:
       context: .
@@ -41,8 +40,6 @@ services:
   # Service for the PostgreSQL database
   database:
     image: postgres:17
-    env_file:
-      - ./libs/common/src/database/.env
     ports:
       - "5432:5432" # Map the host port to the container port
     environment:
@@ -57,7 +54,6 @@ services:
 # Define a custom network for the services
 networks:
   sleepr_network:
-
     # Define a volume for persisting PostgreSQL data
 volumes:
   postgres_data:

@@ -1,26 +1,28 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserRepository } from './users.repository';
 import { CreateUserDto, UpdateUserDto } from './dto/';
-import * as bcrypt from 'bcrypt';
+import * as argon2 from "argon2";
 
 @Injectable()
 export class UsersService {
     constructor(private readonly userRepository: UserRepository ) {}
-
     
     async create(createUserDto: CreateUserDto) {
         return this.userRepository.create({
             ...createUserDto,
-            password: await bcrypt.hash(createUserDto.password, 10),
-            
+            password: await argon2.hash(createUserDto.password),
         });
     }
-    async validateUser(email: string, password: string) {
+
+    async verifyUser(email: string, password: string) {
         const user = await this.userRepository.findOne({ where: { email } });
-
-        const passwordMatch = await bcrypt.compare(password, user.password);
-        return null;
+        if (!user) {
+            throw new UnauthorizedException('User not found');
+        }
+        if (!await argon2.verify(user.password, password)) {
+            throw new UnauthorizedException('Invalid password');
+        }
+        return user;
     }
-
 
 }

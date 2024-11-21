@@ -11,11 +11,12 @@ import * as Joi from 'joi';
 @Module({
   imports: [PrismaModule, LoggerModule, ConfigModule.forRoot({
     isGlobal: true,
+    envFilePath: './apps/jobs/.env',
     validationSchema: Joi.object({
       JOBS_PORT: Joi.number().required(),
       DATABASE_URL: Joi.string().required(),
-      
     }),
+
   })],
   controllers: [JobsController],
   providers: [JobsService, JobsRepository],
