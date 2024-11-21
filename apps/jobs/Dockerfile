@@ -5,7 +5,7 @@ FROM node:18-slim AS development
 WORKDIR /usr/src/app
 
 # Install the necessary dependencies
-RUN apt-get update && apt-get install -y openssl libssl3 && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y openssl libssl3 procps && rm -rf /var/lib/apt/lists/*
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
@@ -53,7 +53,7 @@ ENV DATABASE_URL=${DATABASE_URL}
 WORKDIR /usr/src/app
 
 # Install the necessary dependencies
-RUN apt-get update && apt-get install -y openssl libssl3 && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y openssl libssl3 procps && rm -rf /var/lib/apt/lists/*
 
 # Copy package.json AND package-lock.json
 COPY package*.json ./

@@ -5,7 +5,7 @@ import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
-  console.log('testing')
+
   const app = await NestFactory.create(JobsModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useLogger(app.get(Logger));

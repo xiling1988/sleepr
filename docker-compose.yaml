@@ -58,6 +58,6 @@ services:
 networks:
   sleepr_network:
 
-# Define a volume for persisting PostgreSQL data
+    # Define a volume for persisting PostgreSQL data
 volumes:
   postgres_data:
