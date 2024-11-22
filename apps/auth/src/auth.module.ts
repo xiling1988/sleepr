@@ -7,6 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { UsersService } from './users/users.service';
+import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
   imports: [PrismaModule ,UsersModule, LoggerModule, ConfigModule.forRoot({
@@ -20,12 +21,12 @@ import { UsersService } from './users/users.service';
     useFactory: (configService: ConfigService) => ({
       secret: configService.get<string>('JWT_SECRET'),
       signOptions: { 
-        expiresIn: `${configService.get('JWT_EXPIRES_IN')}s`
+        expiresIn: `${configService.get('JWT_EXPIRATION')}s`
       },
     }),
     inject: [ConfigService],
   })],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, LocalStrategy],
 })
 export class AuthModule {}
