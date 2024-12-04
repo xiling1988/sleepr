@@ -8,8 +8,11 @@ export class JobsService {
   //inject the repository
   constructor(private readonly jobsRepository: JobsRepository) {}
 
-  async create(createJobDto: CreateJobDto) {
-    return this.jobsRepository.create(createJobDto);
+  async create(createJobDto: CreateJobDto, userId: string) {
+    return this.jobsRepository.create({
+      ...createJobDto, 
+      userId
+    });
   }
 
   findAll() {

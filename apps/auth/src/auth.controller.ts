@@ -1,9 +1,11 @@
 import { Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { CurrentUser } from './current-user.decorator';
+import { CurrentUser } from '../../../libs/common/src/decorators/current-user.decorator';
 import { User } from '@prisma/client';
 import { Response } from 'express';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -30,6 +32,19 @@ export class AuthController {
     // In fact I'm going to leave it like that as it looks cleaner. Bottom line is that we can do both.
     return user;
   }
+
+  @UseGuards(JwtAuthGuard)
+  @MessagePattern('authenticate')
+  async authenticate(
+    // The @Payload decorator extracts the data from the message object and passes it to the function.
+    // Specifying 'user' as the argument of the decorator, tells the decorator to extract the 'user' property from the message object.
+    // Not specifying an argument, would pass the whole message object to the function, of which the user property is a part of.
+    //In that case we would have to return data.user in the function, instead of just data. 
+    // https://docs.nestjs.com/microservices/basics#decorators
+    @Payload('user') data: any) {
+    return data
+    }
+
 
 
   @Get()

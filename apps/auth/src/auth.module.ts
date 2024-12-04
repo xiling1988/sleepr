@@ -14,7 +14,8 @@ import { JwtStrategy } from './strategies/jwt.strategy'
   imports: [PrismaModule ,UsersModule, LoggerModule, ConfigModule.forRoot({
     isGlobal: true,
     validationSchema: Joi.object({
-      AUTH_PORT: Joi.number().required(),
+      HTTP_AUTH_PORT: Joi.number().required(),
+      TCP_AUTH_PORT: Joi.number().required(),
       DATABASE_URL: Joi.string().required(),
       JWT_SECRET: Joi.string().required(),
       JWT_EXPIRATION: Joi.number().required(),
