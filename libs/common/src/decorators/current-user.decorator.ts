@@ -1,7 +1,7 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
-import { User } from "@prisma/client";
+import { UserDto } from "../dto";
 
-const getCurrentUserByContext = (context: ExecutionContext) : User => {
+const getCurrentUserByContext = (context: ExecutionContext) : UserDto => {
     return context.switchToHttp().getRequest().user;
 }
 

@@ -13,6 +13,8 @@ async function bootstrap() {
   app.connectMicroservice({
     transport: Transport.TCP,
     options: {
+      //By defining the host as 0.0.0.0 we allow the service to be accessed from any IP address.
+      // This allows any other service to connect to the auth service.
       host: '0.0.0.0',
       port: configService.get('TCP_AUTH_PORT'),
     }

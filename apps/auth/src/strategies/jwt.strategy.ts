@@ -16,9 +16,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
             jwtFromRequest: ExtractJwt.fromExtractors([
                 // setting the request to any, as the request COULD come from express but also from a microservice via the MessagePattern(TCP call.)
                 (request: any) => {
-                    console.log('Cookies:', request?.cookies);
-                    console.log('Headers:', request?.headers);
-                    // If the request is from a microservice, the token will not be in the cookies but in the headers.
+                    // Extract the token from the request.
+                    // If the request is from a microservice, the token will not be in the cookies but in the Authentication header.
                     // So we write a condition to check if the token is in the cookies, if not, we check the headers.
                     const token = request?.cookies?.Authentication || request?.Authentication;
                     console.log('Extracted Token:', token);

@@ -33,7 +33,7 @@ COPY . .
 # However, keeping the EXPOSE line can be useful for readability and documentation,
 # especially when working with multiple microservices, 
 # as it indicates which port the application inside the container is expected to run on.
-EXPOSE 3001
+EXPOSE 3003
 
 # This command builds the application and transpiles the TypeScript code to JavaScript code using the Nest CLI 
 RUN npm run build
@@ -64,4 +64,6 @@ RUN npm install --only=production
 COPY --from=development /usr/src/app/dist ./dist
 
 # The CMD instruction specifies the command that should be executed when the Docker container starts up.
-CMD ["node", "dist/apps/auth/main.js"]
+CMD ["node", "dist/apps/payments/main"]
+
+

@@ -21,16 +21,16 @@ import { JwtStrategy } from './strategies/jwt.strategy'
       JWT_EXPIRATION: Joi.number().required(),
       JWT_EXPIRATION_STRING: Joi.string().required(),
     })}), JwtModule.registerAsync({
-    useFactory: (configService: ConfigService) => {
-      const expiration = configService.get<number>('JWT_EXPIRATION');
-      console.log('JWT_EXPIRATION:', expiration); // Log this value
-      return ({
-      secret: configService.get<string>('JWT_SECRET'),
-      expirationString: configService.get<string>('JWT_EXPIRATION_STRING'),
-      signOptions: { 
-        expiresIn: expiration,
-      },
-    })},
+      useFactory: (configService: ConfigService) => {
+        const expiration = configService.get<number>('JWT_EXPIRATION');
+        console.log('JWT_EXPIRATION:', expiration); // Log this value
+        return ({
+        secret: configService.get<string>('JWT_SECRET'),
+        expirationString: configService.get<string>('JWT_EXPIRATION_STRING'),
+        signOptions: { 
+          expiresIn: expiration,
+        },
+      })},
     inject: [ConfigService],
 
   })],
